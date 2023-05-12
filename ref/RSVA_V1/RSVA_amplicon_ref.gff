@@ -1,0 +1,29 @@
+##gff-version 3
+#!gff-spec-version 1.21
+#!processor NCBI annotwriter
+##sequence-region RSVA 1 15185
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=208893
+RSVA	Genbank	region	1	15185	.	+	.	ID=RSVA:1..15185;Dbxref=taxon:208893;genotype=ON1
+RSVA	Genbank	gene	55	474	.	+	.	ID=gene-NS1;Name=NS1;gbkey=Gene;gene=NS1;gene_biotype=protein_coding
+RSVA	Genbank	CDS	55	474	.	+	0	ID=cds-QYW11213.1;Parent=gene-NS1;Dbxref=NCBI_GP:QYW11213.1;Name=QYW11213.1;gbkey=CDS;gene=NS1;product=nonstructural protein 1;protein_id=QYW11213.1
+RSVA	Genbank	gene	584	958	.	+	.	ID=gene-NS2;Name=NS2;gbkey=Gene;gene=NS2;gene_biotype=protein_coding
+RSVA	Genbank	CDS	584	958	.	+	0	ID=cds-QYW11214.1;Parent=gene-NS2;Dbxref=NCBI_GP:QYW11214.1;Name=QYW11214.1;gbkey=CDS;gene=NS2;product=nonstructural protein 2;protein_id=QYW11214.1
+RSVA	Genbank	gene	1096	2271	.	+	.	ID=gene-N;Name=N;gbkey=Gene;gene=N;gene_biotype=protein_coding
+RSVA	Genbank	CDS	1096	2271	.	+	0	ID=cds-QYW11215.1;Parent=gene-N;Dbxref=NCBI_GP:QYW11215.1;Name=QYW11215.1;gbkey=CDS;gene=N;product=nucleoprotein;protein_id=QYW11215.1
+RSVA	Genbank	gene	2303	3028	.	+	.	ID=gene-P;Name=P;gbkey=Gene;gene=P;gene_biotype=protein_coding
+RSVA	Genbank	CDS	2303	3028	.	+	0	ID=cds-QYW11216.1;Parent=gene-P;Dbxref=NCBI_GP:QYW11216.1;Name=QYW11216.1;gbkey=CDS;gene=P;product=phosphoprotein;protein_id=QYW11216.1
+RSVA	Genbank	gene	3211	3981	.	+	.	ID=gene-M;Name=M;gbkey=Gene;gene=M;gene_biotype=protein_coding
+RSVA	Genbank	CDS	3211	3981	.	+	0	ID=cds-QYW11217.1;Parent=gene-M;Dbxref=NCBI_GP:QYW11217.1;Name=QYW11217.1;gbkey=CDS;gene=M;product=matrix protein;protein_id=QYW11217.1
+RSVA	Genbank	gene	4251	4445	.	+	.	ID=gene-SH;Name=SH;gbkey=Gene;gene=SH;gene_biotype=protein_coding
+RSVA	Genbank	CDS	4251	4445	.	+	0	ID=cds-QYW11218.1;Parent=gene-SH;Dbxref=NCBI_GP:QYW11218.1;Name=QYW11218.1;gbkey=CDS;gene=SH;product=small hydrophobic protein;protein_id=QYW11218.1
+RSVA	Genbank	gene	4637	5602	.	+	.	ID=gene-G;Name=G;gbkey=Gene;gene=G;gene_biotype=protein_coding
+RSVA	Genbank	CDS	4637	5602	.	+	0	ID=cds-QYW11219.1;Parent=gene-G;Dbxref=NCBI_GP:QYW11219.1;Name=QYW11219.1;gbkey=CDS;gene=G;product=attachment glycoprotein;protein_id=QYW11219.1
+RSVA	Genbank	gene	5682	7406	.	+	.	ID=gene-F;Name=F;gbkey=Gene;gene=F;gene_biotype=protein_coding
+RSVA	Genbank	CDS	5682	7406	.	+	0	ID=cds-QYW11220.1;Parent=gene-F;Dbxref=NCBI_GP:QYW11220.1;Name=QYW11220.1;gbkey=CDS;gene=F;product=fusion glycoprotein;protein_id=QYW11220.1
+RSVA	Genbank	gene	7625	8209	.	+	.	ID=gene-M2;Name=M2;gbkey=Gene;gene=M2;gene_biotype=protein_coding
+RSVA	Genbank	CDS	7625	8209	.	+	0	ID=cds-QYW11221.1;Parent=gene-M2;Dbxref=NCBI_GP:QYW11221.1;Name=QYW11221.1;gbkey=CDS;gene=M2;product=M2-1 protein;protein_id=QYW11221.1
+RSVA	Genbank	gene	8184	8450	.	+	.	ID=gene-M2-2;Name=M2;gbkey=Gene;gene=M2;gene_biotype=protein_coding
+RSVA	Genbank	CDS	8184	8450	.	+	0	ID=cds-QYW11222.1;Parent=gene-M2-2;Dbxref=NCBI_GP:QYW11222.1;Name=QYW11222.1;gbkey=CDS;gene=M2;product=M2-2 protein;protein_id=QYW11222.1
+RSVA	Genbank	gene	8517	15014	.	+	.	ID=gene-L;Name=L;gbkey=Gene;gene=L;gene_biotype=protein_coding
+RSVA	Genbank	CDS	8517	15014	.	+	0	ID=cds-QYW11223.1;Parent=gene-L;Dbxref=NCBI_GP:QYW11223.1;Name=QYW11223.1;gbkey=CDS;gene=L;product=polymerase;protein_id=QYW11223.1
+
