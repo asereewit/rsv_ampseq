@@ -1,6 +1,6 @@
 aws_dir=$1
-r1_ext='_L001_R1_001.fastq.gz'
-r2_ext='_L001_R2_001.fastq.gz'
+r1_ext='L001_R1_001.fastq.gz'
+r2_ext='L001_R2_001.fastq.gz'
 aws s3 ls ${aws_dir} | grep "fastq.gz" | rev | cut -d " " -f1 | rev > aws_file_list.txt
 echo "sample,fastq_1,fastq_2" > samplesheet.csv
 IFS=$'\n\r'
