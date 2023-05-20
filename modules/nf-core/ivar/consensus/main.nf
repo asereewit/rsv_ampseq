@@ -37,6 +37,9 @@ process IVAR_CONSENSUS {
             $args \\
             -p $prefix
 
+    # remove leading and trailing Ns
+    sed -i '/^>/! s/^N*//; /^>/! s/N*\$//' ${prefix}.fa
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         ivar: \$(echo \$(ivar version 2>&1) | sed 's/^.*iVar version //; s/ .*\$//')

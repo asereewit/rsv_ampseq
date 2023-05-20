@@ -26,4 +26,3 @@ RSVA	Genbank	gene	8184	8450	.	+	.	ID=gene-M2-2;Name=M2;gbkey=Gene;gene=M2;gene_b
 RSVA	Genbank	CDS	8184	8450	.	+	0	ID=cds-QYW11222.1;Parent=gene-M2-2;Dbxref=NCBI_GP:QYW11222.1;Name=QYW11222.1;gbkey=CDS;gene=M2;product=M2-2 protein;protein_id=QYW11222.1
 RSVA	Genbank	gene	8517	15014	.	+	.	ID=gene-L;Name=L;gbkey=Gene;gene=L;gene_biotype=protein_coding
 RSVA	Genbank	CDS	8517	15014	.	+	0	ID=cds-QYW11223.1;Parent=gene-L;Dbxref=NCBI_GP:QYW11223.1;Name=QYW11223.1;gbkey=CDS;gene=L;product=polymerase;protein_id=QYW11223.1
-
