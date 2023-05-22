@@ -26,4 +26,3 @@ RSVB	Genbank	gene	8221	8493	.	+	.	ID=gene-M2-2;Name=M2;gbkey=Gene;gene=M2;gene_b
 RSVB	Genbank	CDS	8221	8493	.	+	0	ID=cds-M2-2;Parent=gene-M2-2;Dbxref=NCBI_GP:QYW12372.1;Name=QYW12372.1;gbkey=CDS;gene=M2;product=M2-2 protein;protein_id=QYW12372.1
 RSVB	Genbank	gene	8559	15059	.	+	.	ID=gene-L;Name=L;gbkey=Gene;gene=L;gene_biotype=protein_coding
 RSVB	Genbank	CDS	8559	15059	.	+	0	ID=cds-L;Parent=gene-L;Dbxref=NCBI_GP:QYW12373.1;Name=QYW12373.1;gbkey=CDS;gene=L;product=polymerase;protein_id=QYW12373.1
-

@@ -35,16 +35,16 @@ process PICK_REF {
 
     if [[ \${ref_highest_median_cov} == RSVA ]]
     then
-        rsv_type=`echo RSVA`
+        rsv_type="RSVA"
         cp ${primer_bed_RSVA} ${prefix}.RSV_primer.bed
         cp ${ref_gff_RSVA} ${prefix}.RSV_ref.gff
-        bowtie2_index=`echo ${params.bowtie2_index_RSVA}`
+        bowtie2_index="${params.bowtie2_index_RSVA}"
     elif [[ \${ref_highest_median_cov} == RSVB ]]
     then
-        rsv_type=`echo RSVB`
+        rsv_type="RSVB"
         cp ${primer_bed_RSVB} ${prefix}.RSV_primer.bed  
         cp ${ref_gff_RSVB} ${prefix}.RSV_ref.gff
-        bowtie2_index=`echo ${params.bowtie2_index_RSVB}`
+        bowtie2_index="${params.bowtie2_index_RSVB}"
     fi
 
     # extract the reference
