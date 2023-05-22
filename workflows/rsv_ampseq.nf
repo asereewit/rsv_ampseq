@@ -61,6 +61,7 @@ include { IVAR_VARIANTS               } from '../modules/nf-core/ivar/variants/m
 include { IVAR_CONSENSUS              } from '../modules/nf-core/ivar/consensus/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { BCFTOOLS_MPILEUP            } from '../modules/nf-core/bcftools/mpileup/main'
 
 //
 // SUBWORKFLOW: Consisting of entirely of nf-core/modules
@@ -133,6 +134,12 @@ workflow RSV_AMPSEQ {
 		ch_ivar_primer_trim_bam_bed,
         []
 	)
+
+    BCFTOOLS_MPILEUP (
+        IVAR_PRIMER_TRIM.out.bam,
+        params.fasta,
+        params.save_mpileup
+    )
 
     IVAR_PRIMER_TRIM.out.bam.join(PICK_REF.out.rsv_ref_fasta).join(PICK_REF.out.rsv_ref_gff).set{ch_ivar_variants_bam_fasta_gff}
     //IVAR_PRIMER_TRIM.out.bam.join(PICK_REF.out.rsv_ref_gff).map { meta, reads, gff -> [ meta, gff ] }.set { ch_ivar_variants_ref_gff }
