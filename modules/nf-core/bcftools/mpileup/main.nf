@@ -2,7 +2,7 @@ process BCFTOOLS_MPILEUP {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "bioconda::bcftools=1.17"
+    conda (params.enable_conda ? "bioconda::bcftools=1.17" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/bcftools:1.17--haef29d1_0':
         'public.ecr.aws/biocontainers/bcftools:1.17--haef29d1_0' }"
