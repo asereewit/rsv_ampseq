@@ -9,7 +9,7 @@ Install [`Docker`](https://docs.docker.com/engine/installation/)
 Running the pipeline:
 
 ```
-nextflow run greninger-lab/rsv_ampseq --input input_samplesheet.csv --outdir pipeline_output -profile docker -with-tower
+nextflow run greninger-lab/rsv_ampseq --input input_samplesheet.csv --outdir pipeline_output -profile docker
 ```
 
 To run it on AWS, add your nextflow config for AWS using -c:
