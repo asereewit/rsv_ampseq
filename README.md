@@ -9,13 +9,13 @@ Install [`Docker`](https://docs.docker.com/engine/installation/)
 Running the pipeline:
 
 ```
-nextflow run greninger-lab/rsv_ampseq --input input_samplesheet.csv --outdir pipeline_output -profile docker
+nextflow run asereewit/rsv_ampseq -r main -latest --input input_samplesheet.csv --output pipeline_output -profile docker
 ```
 
 To run it on AWS, add your nextflow config for AWS using -c:
 
 ```
-nextflow run greninger-lab/rsv_ampseq --input input_samplesheet.csv --outdir pipeline_output -profile docker -with-tower -c nextflow_aws.config
+nextflow run asereewit/rsv_ampseq -r main -latest --input input_samplesheet.csv --output pipeline_output -profile docker -with-tower -c nextflow_aws.config
 ```
 
 Samplesheet example: `assets/samplesheet.csv`
