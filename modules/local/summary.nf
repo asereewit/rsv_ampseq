@@ -7,14 +7,11 @@ process SUMMARY {
         'greningerlab/revica:ubuntu-20.04' }"
 
     input:
-    tuple val(meta), path(fastp_trim_log), path(ivar_trim_bam), path(ivar_trim_bai), path(ivar_consensus), val(rsv_type)
-    //tuple val(meta), path(ivar_trim_bam), path(ivar_trim_bai)
-    //tuple val(meta), path(ivar_consensus)
-    //tuple val(meta), val(rsv_type)
+    tuple val(meta), path(fastp_trim_log), path(ivar_trim_bam), path(ivar_consensus)
 
     output:
-    path("*.tsv"), emit: summary_tsv
-    path "versions.yml"           , emit: versions
+    path("*.tsv"),          emit: summary_tsv
+    path "versions.yml",    emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,10 +19,11 @@ process SUMMARY {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+
     def fusion_chr_start_end = ""
-    if ("${rsv_type}" == "RSVA") {
+    if ("${meta.rsv_type}" == "RSVA") {
         fusion_chr_start_end = "RSVA:5682-7406"
-    } else if ("${rsv_type}" == "RSVB") {
+    } else if ("${meta.rsv_type}" == "RSVB") {
         fusion_chr_start_end = "RSVB:5717-7441"
     }
     def fusion_length = '1725'

@@ -8,7 +8,9 @@ process IVAR_CONSENSUS {
         'quay.io/biocontainers/ivar:1.4--h6b7c446_1' }"
 
     input:
-    tuple val(meta), path(bam), path(fasta)
+    tuple val(meta), path(bam)
+    path ref_rsva
+    path ref_rsvb
     val save_mpileup
 
     output:
@@ -25,17 +27,26 @@ process IVAR_CONSENSUS {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
+    
+    def ref
+    if ("${meta.rsv_type}" == "RSVA") {
+        ref = "${ref_rsva}"
+    } else if ("${meta.rsv_type}" == "RSVB") {
+        ref = "${ref_rsvb}"
+    }
+
     """
     samtools \\
         mpileup \\
-        --reference $fasta \\
+        --reference $ref \\
         $args2 \\
         $bam \\
         $mpileup \\
         | ivar \\
             consensus \\
             $args \\
-            -p $prefix
+            -p $prefix \\
+            -i $prefix
 
     # remove leading and trailing Ns
     sed -i '/^>/! s/^N*//; /^>/! s/N*\$//' ${prefix}.fa

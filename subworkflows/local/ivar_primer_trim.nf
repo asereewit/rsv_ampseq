@@ -4,8 +4,10 @@ include { BAM_SORT_STATS_SAMTOOLS } from '../nf-core/bam_sort_stats_samtools/mai
 workflow IVAR_PRIMER_TRIM {
 
     take:
-    ch_bam_bed // channel: [ val(meta), path(bam), path(bai), path(bed) ]
-    //ch_bed // channel: [ val(meta), path(bed) ]
+    ch_bam  // channel: [ val(meta), path(bam) ]
+    ch_bai  // channel: [ val(meta), path(bai) ]
+    ch_rsva_primer_bed // channel: /path/to/rsva_primer_bed
+    ch_rsvb_primer_bed // channel: /path/to/rsvb_primer_bed
     ch_fasta
 
     main:
@@ -13,7 +15,10 @@ workflow IVAR_PRIMER_TRIM {
     ch_versions = Channel.empty()
 
     IVAR_TRIM (
-        ch_bam_bed,
+        ch_bam,
+        ch_bai,
+        ch_rsva_primer_bed,
+        ch_rsvb_primer_bed,
     )
 
     BAM_SORT_STATS_SAMTOOLS (

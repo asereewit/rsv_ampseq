@@ -7,11 +7,12 @@ include { BAM_SORT_STATS_SAMTOOLS } from '../bam_sort_stats_samtools/main'
 
 workflow FASTQ_ALIGN_BOWTIE2 {
     take:
-    ch_reads_index          // channel: [ val(meta), [ reads ], [ index ]]
-    //ch_index          // channel: /path/to/bowtie2/index/
-    save_unaligned    // val
-    sort_bam          // val
-    ch_fasta          // channel: /path/to/reference.fasta
+    ch_reads            // channel: [ val(meta), [ reads ] ]
+    ch_rsva_index       // channel: /path/to/bowtie2/rsva_index/
+    ch_rsvb_index       // channel: /path/to/bowtie2/rsvb_index/
+    save_unaligned      // val
+    sort_bam            // val
+    ch_fasta            // channel: /path/to/reference.fasta
 
     main:
 
@@ -20,7 +21,13 @@ workflow FASTQ_ALIGN_BOWTIE2 {
     //
     // Map reads with Bowtie2
     //
-    BOWTIE2_ALIGN ( ch_reads_index, save_unaligned, sort_bam )
+    BOWTIE2_ALIGN (
+        ch_reads,
+        ch_rsva_index,
+        ch_rsvb_index,
+        save_unaligned,
+        sort_bam
+    )
     ch_versions = ch_versions.mix(BOWTIE2_ALIGN.out.versions.first())
 
     //

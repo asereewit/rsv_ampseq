@@ -13,9 +13,9 @@ process BBMAP_ALIGN {
 
     output:
     tuple val(meta), path("*.bam"), emit: bam
-    tuple val(meta), path("*bbmap_align.covstats.sorted.tsv"), emit: align_covstats
+    tuple val(meta), path("*.sorted.tsv"), path(fastq), emit: align_covstats_fastq
     tuple val(meta), path("*.log"), emit: log
-    path "versions.yml"           , emit: versions
+    path "versions.yml",            emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -23,7 +23,6 @@ process BBMAP_ALIGN {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-
     input = meta.single_end ? "in=${fastq}" : "in=${fastq[0]} in2=${fastq[1]}"
 
     // Set the db variable to reflect the three possible types of reference input: 1) directory

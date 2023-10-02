@@ -39,7 +39,7 @@
             "description": "Define where the pipeline should find input data and save output data.",
             "required": [
                 "input",
-                "outdir"
+                "output"
             ],
             "properties": {
                 "input": {
@@ -52,11 +52,15 @@
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/rsv_ampseq/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
-                "outdir": {
+                "output": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "run_name": {
+                    "type": "string",
+                    "default": "run"
                 },
                 "email": {
                     "type": "string",
@@ -108,6 +112,10 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
+                "ref_RSVA": {
+                    "type": "string",
+                    "default": "/Users/greningerlab/AS/rsv_ampseq/ref/RSVA_V1/RSVA.fasta"
+                },
                 "primer_bed_RSVA": {
                     "type": "string",
                     "default": "/Users/greningerlab/AS/nf_rsv_ampseq/ref/RSVA_V1/RSVA.primer.bed"
@@ -119,6 +127,10 @@
                 "bowtie2_index_RSVA": {
                     "type": "string",
                     "default": "/Users/greningerlab/AS/nf_rsv_ampseq/ref/RSVA_V1/bowtie2/"
+                },
+                "ref_RSVB": {
+                    "type": "string",
+                    "default": "/Users/greningerlab/AS/rsv_ampseq/ref/RSVB_V1/RSVB.fasta"
                 },
                 "primer_bed_RSVB": {
                     "type": "string",
@@ -304,7 +316,7 @@
                 "tracedir": {
                     "type": "string",
                     "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
+                    "default": "${params.output}/pipeline_info",
                     "fa_icon": "fas fa-cogs",
                     "hidden": true
                 },

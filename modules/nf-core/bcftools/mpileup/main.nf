@@ -9,14 +9,15 @@ process BCFTOOLS_MPILEUP {
 
     input:
     tuple val(meta), path(bam)
-    path fasta
+    path ref_rsva
+    path ref_rsvb
     val save_mpileup
 
     output:
-    tuple val(meta), path("*.vcf")     , emit: vcf
-    tuple val(meta), path("*stats.txt")  , emit: stats
-    tuple val(meta), path("*.mpileup.gz"), emit: mpileup, optional: true
-    path  "versions.yml"                 , emit: versions
+    tuple val(meta), path("*.vcf"),         emit: vcf
+    tuple val(meta), path("*stats.txt"),    emit: stats
+    tuple val(meta), path("*.mpileup.gz"),  emit: mpileup, optional: true
+    path  "versions.yml",                   emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -28,12 +29,20 @@ process BCFTOOLS_MPILEUP {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
     def bgzip_mpileup = save_mpileup ? "bgzip ${prefix}.mpileup" : ""
+
+    def ref
+    if ("${meta.rsv_type}" == "RSVA") {
+        ref = "${ref_rsva}"
+    } else if ("${meta.rsv_type}" == "RSVB") {
+        ref = "${ref_rsvb}"
+    }
+
     """
     echo "${meta.id}" > sample_name.list
 
     bcftools \\
         mpileup \\
-        --fasta-ref $fasta \\
+        --fasta-ref $ref \\
         $args \\
         $bam \\
         $mpileup \\
