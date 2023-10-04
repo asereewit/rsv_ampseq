@@ -8,14 +8,14 @@ process IVAR_TRIM {
         'quay.io/biocontainers/ivar:1.4--h6b7c446_1' }"
 
     input:
-    tuple val(meta), path(bam)
-    tuple val(meta), path(bai)
+    tuple val(meta), val(ref), path(bam)
+    tuple val(meta), val(ref), path(bai)
     path rsva_primer_bed
     path rsvb_primer_bed
 
     output:
-    tuple val(meta), path("*.bam"), emit: bam
-    tuple val(meta), path('*.log'), emit: log
+    tuple val(meta), val(ref), path("*.bam"), emit: bam
+    tuple val(meta), val(ref), path('*.log'), emit: log
     path "versions.yml"           , emit: versions
 
     when:
@@ -26,9 +26,9 @@ process IVAR_TRIM {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     def bed
-    if ("${meta.rsv_type}" == "RSVA") {
+    if ("${ref.type}" == "RSVA") {
         bed = "${rsva_primer_bed}"
-    } else if ("${meta.rsv_type}" == "RSVB") {
+    } else if ("${ref.type}" == "RSVB") {
         bed = "${rsvb_primer_bed}"
     }
 

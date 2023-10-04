@@ -8,7 +8,7 @@ include { BAM_STATS_SAMTOOLS } from '../bam_stats_samtools/main'
 
 workflow BAM_SORT_STATS_SAMTOOLS {
     take:
-    ch_bam   // channel: [ val(meta), [ bam ] ]
+    ch_bam   // channel: [ val(meta), val(ref), [ bam ] ]
     ch_fasta // channel: [ fasta ]
 
     main:
@@ -22,14 +22,14 @@ workflow BAM_SORT_STATS_SAMTOOLS {
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     SAMTOOLS_SORT.out.bam
-        .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
-        .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
+        .join(SAMTOOLS_INDEX.out.bai, by: [0,1], remainder: true)
+        .join(SAMTOOLS_INDEX.out.csi, by: [0,1], remainder: true)
         .map {
-            meta, bam, bai, csi ->
+            meta, ref_type, bam, bai, csi ->
                 if (bai) {
-                    [ meta, bam, bai ]
+                    [ meta, ref_type, bam, bai ]
                 } else {
-                    [ meta, bam, csi ]
+                    [ meta, ref_type, bam, csi ]
                 }
         }
         .set { ch_bam_bai }
@@ -38,13 +38,13 @@ workflow BAM_SORT_STATS_SAMTOOLS {
     ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions)
 
     emit:
-    bam      = SAMTOOLS_SORT.out.bam           // channel: [ val(meta), [ bam ] ]
-    bai      = SAMTOOLS_INDEX.out.bai          // channel: [ val(meta), [ bai ] ]
-    csi      = SAMTOOLS_INDEX.out.csi          // channel: [ val(meta), [ csi ] ]
+    bam      = SAMTOOLS_SORT.out.bam           // channel: [ val(meta), val(ref), [ bam ] ]
+    bai      = SAMTOOLS_INDEX.out.bai          // channel: [ val(meta), val(ref), [ bai ] ]
+    csi      = SAMTOOLS_INDEX.out.csi          // channel: [ val(meta), val(ref), [ csi ] ]
 
-    stats    = BAM_STATS_SAMTOOLS.out.stats    // channel: [ val(meta), [ stats ] ]
-    flagstat = BAM_STATS_SAMTOOLS.out.flagstat // channel: [ val(meta), [ flagstat ] ]
-    idxstats = BAM_STATS_SAMTOOLS.out.idxstats // channel: [ val(meta), [ idxstats ] ]
+    stats    = BAM_STATS_SAMTOOLS.out.stats    // channel: [ val(meta), val(ref), [ stats ] ]
+    flagstat = BAM_STATS_SAMTOOLS.out.flagstat // channel: [ val(meta), val(ref), [ flagstat ] ]
+    idxstats = BAM_STATS_SAMTOOLS.out.idxstats // channel: [ val(meta), val(ref), [ idxstats ] ]
 
     versions = ch_versions                     // channel: [ versions.yml ]
 }

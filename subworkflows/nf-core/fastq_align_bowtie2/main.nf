@@ -7,12 +7,11 @@ include { BAM_SORT_STATS_SAMTOOLS } from '../bam_sort_stats_samtools/main'
 
 workflow FASTQ_ALIGN_BOWTIE2 {
     take:
-    ch_reads            // channel: [ val(meta), [ reads ] ]
+    ch_reads            // channel: [ val(meta), val(ref), [ reads ] ]
     ch_rsva_index       // channel: /path/to/bowtie2/rsva_index/
     ch_rsvb_index       // channel: /path/to/bowtie2/rsvb_index/
     save_unaligned      // val
     sort_bam            // val
-    ch_fasta            // channel: /path/to/reference.fasta
 
     main:
 
@@ -37,16 +36,16 @@ workflow FASTQ_ALIGN_BOWTIE2 {
     ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
 
     emit:
-    bam_orig         = BOWTIE2_ALIGN.out.bam          // channel: [ val(meta), bam   ]
-    log_out          = BOWTIE2_ALIGN.out.log          // channel: [ val(meta), log   ]
-    fastq            = BOWTIE2_ALIGN.out.fastq        // channel: [ val(meta), fastq ]
+    bam_orig         = BOWTIE2_ALIGN.out.bam          // channel: [ val(meta), val(ref), bam   ]
+    log_out          = BOWTIE2_ALIGN.out.log          // channel: [ val(meta), val(ref), log   ]
+    fastq            = BOWTIE2_ALIGN.out.fastq        // channel: [ val(meta), val(ref), fastq ]
 
-    bam              = BAM_SORT_STATS_SAMTOOLS.out.bam      // channel: [ val(meta), [ bam ] ]
-    bai              = BAM_SORT_STATS_SAMTOOLS.out.bai      // channel: [ val(meta), [ bai ] ]
-    csi              = BAM_SORT_STATS_SAMTOOLS.out.csi      // channel: [ val(meta), [ csi ] ]
-    stats            = BAM_SORT_STATS_SAMTOOLS.out.stats    // channel: [ val(meta), [ stats ] ]
-    flagstat         = BAM_SORT_STATS_SAMTOOLS.out.flagstat // channel: [ val(meta), [ flagstat ] ]
-    idxstats         = BAM_SORT_STATS_SAMTOOLS.out.idxstats // channel: [ val(meta), [ idxstats ] ]
+    bam              = BAM_SORT_STATS_SAMTOOLS.out.bam      // channel: [ val(meta), val(ref), [ bam ] ]
+    bai              = BAM_SORT_STATS_SAMTOOLS.out.bai      // channel: [ val(meta), val(ref), [ bai ] ]
+    csi              = BAM_SORT_STATS_SAMTOOLS.out.csi      // channel: [ val(meta), val(ref), [ csi ] ]
+    stats            = BAM_SORT_STATS_SAMTOOLS.out.stats    // channel: [ val(meta), val(ref), [ stats ] ]
+    flagstat         = BAM_SORT_STATS_SAMTOOLS.out.flagstat // channel: [ val(meta), val(ref), [ flagstat ] ]
+    idxstats         = BAM_SORT_STATS_SAMTOOLS.out.idxstats // channel: [ val(meta), val(ref), [ idxstats ] ]
     
     versions         = ch_versions                      // channel: [ versions.yml ]
 }

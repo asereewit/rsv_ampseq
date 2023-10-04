@@ -8,15 +8,15 @@ process IVAR_CONSENSUS {
         'quay.io/biocontainers/ivar:1.4--h6b7c446_1' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), val(ref), path(bam)
     path ref_rsva
     path ref_rsvb
     val save_mpileup
 
     output:
-    tuple val(meta), path("*.fa")      , emit: fasta
-    tuple val(meta), path("*.qual.txt"), emit: qual
-    tuple val(meta), path("*.mpileup") , optional:true, emit: mpileup
+    tuple val(meta), val(ref), path("*.fa")      , emit: fasta
+    tuple val(meta), val(ref), path("*.qual.txt"), emit: qual
+    tuple val(meta), val(ref), path("*.mpileup") , optional:true, emit: mpileup
     path "versions.yml"                , emit: versions
 
     when:
@@ -28,17 +28,17 @@ process IVAR_CONSENSUS {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
     
-    def ref
-    if ("${meta.rsv_type}" == "RSVA") {
-        ref = "${ref_rsva}"
-    } else if ("${meta.rsv_type}" == "RSVB") {
-        ref = "${ref_rsvb}"
+    def fasta
+    if ("${ref.type}" == "RSVA") {
+        fasta = "${ref_rsva}"
+    } else if ("${ref.type}" == "RSVB") {
+        fasta = "${ref_rsvb}"
     }
 
     """
     samtools \\
         mpileup \\
-        --reference $ref \\
+        --reference $fasta \\
         $args2 \\
         $bam \\
         $mpileup \\

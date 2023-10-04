@@ -8,10 +8,10 @@ process SAMTOOLS_FLAGSTAT {
         'quay.io/biocontainers/samtools:1.17--h00cdaf9_0' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), val(ref), path(bam), path(bai)
 
     output:
-    tuple val(meta), path("*.flagstat"), emit: flagstat
+    tuple val(meta), val(ref), path("*.flagstat"), emit: flagstat
     path  "versions.yml"               , emit: versions
 
     when:

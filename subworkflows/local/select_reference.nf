@@ -20,25 +20,26 @@ workflow SELECT_REFERENCE {
     .set { ch_new_meta_reads }
 
     emit:
-    reads =  ch_new_meta_reads              // channel: [ val(new_meta), path(reads) ]
+    reads =  ch_new_meta_reads              // channel: [ val(meta), val(ref), path(reads) ]
     versions =  BBMAP_ALIGN.out.versions    // channel: [ versions.yml ]
 
 }
 
-// Function to get list of [ [ meta.id, meta.single_end, meta.rsv_type ], fastq ]
+// Function to get list of [ [ meta.id, meta.single_end ], ref.type, fastq ]
 def add_ref_info(meta, covstats, fastq) {
 
-    def lines = new File(covstats.toString()).readLines()
+    def lines = covstats.text.readLines()
 
     def rsv_type = lines[1].split('\t')[0]
 
     def new_meta_fastq = []
+    def ref = [:]
     if (rsv_type == "RSVA") { 
-        meta.rsv_type = "RSVA"
+        ref.type = "RSVA"
     } else if (rsv_type == "RSVB") {
-        meta.rsv_type = "RSVB"
+        ref.type = "RSVB"
     }
-    new_meta_fastq = [ meta, fastq ] 
+    new_meta_fastq = [ meta, ref, fastq ] 
 
     return new_meta_fastq
 }

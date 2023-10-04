@@ -69,7 +69,7 @@ workflow RSV_AMPSEQ {
 
     FASTQ_TRIM_FASTP_FASTQC (
         INPUT_CHECK.out.reads,
-        params.adapter_fasta,
+        file(params.adapter_fasta),
         params.save_trimmed_fail,
         params.save_merged,
         params.skip_fastp,
@@ -78,7 +78,7 @@ workflow RSV_AMPSEQ {
 
     SELECT_REFERENCE (
         FASTQ_TRIM_FASTP_FASTQC.out.reads,
-        params.fasta
+        file(params.fasta)
     )
 
 	FASTQ_ALIGN_BOWTIE2 ( 
@@ -86,8 +86,7 @@ workflow RSV_AMPSEQ {
         params.bowtie2_index_RSVA,
         params.bowtie2_index_RSVB,
 		params.save_bowtie2_unaligned,
-		false,
-        []
+		false
 	)
 
 	IVAR_PRIMER_TRIM (
@@ -111,7 +110,6 @@ workflow RSV_AMPSEQ {
         params.ref_RSVB,
         params.ref_gff_RSVA,
         params.ref_gff_RSVB,
-        [],
         false
     )
 
@@ -128,9 +126,10 @@ workflow RSV_AMPSEQ {
         params.save_mpileup
     ) 
 
-    FASTQ_TRIM_FASTP_FASTQC.out.trim_log
-        .join(IVAR_PRIMER_TRIM.out.bam)
-        .join(IVAR_CONSENSUS.out.fasta)
+    IVAR_PRIMER_TRIM.out.bam
+        .join(IVAR_PRIMER_TRIM.out.bai, by: [0,1])
+        .join(IVAR_CONSENSUS.out.fasta, by: [0,1])
+        .join(FASTQ_TRIM_FASTP_FASTQC.out.trim_log)
         .set { ch_summary }
     
     SUMMARY ( ch_summary )

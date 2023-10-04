@@ -8,17 +8,16 @@ process IVAR_VARIANTS {
         'quay.io/biocontainers/ivar:1.4--h6b7c446_1' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), val(ref), path(bam)
     path ref_rsva
     path ref_rsvb
     path gff_rsva
     path gff_rsvb
-    path fai
     val save_mpileup
 
     output:
-    tuple val(meta), path("*.tsv")    , emit: tsv
-    tuple val(meta), path("*.mpileup"), emit: mpileup, optional: true
+    tuple val(meta), val(ref), path("*.tsv")    , emit: tsv
+    tuple val(meta), val(ref), path("*.mpileup"), emit: mpileup, optional: true
     path "versions.yml"               , emit: versions
 
     when:
@@ -30,13 +29,13 @@ process IVAR_VARIANTS {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
 
-    def ref
+    def fasta
     def features 
-    if ("${meta.rsv_type}" == "RSVA") {
-        ref = "${ref_rsva}"
+    if ("${ref.type}" == "RSVA") {
+        fasta = "${ref_rsva}"
         features =  "-g ${gff_rsva}"
-    } else if ("${meta.rsv_type}" == "RSVB") {
-        ref = "${ref_rsvb}"
+    } else if ("${ref.type}" == "RSVB") {
+        fasta = "${ref_rsvb}"
         features =  "-g ${gff_rsvb}"
     }
 
@@ -44,14 +43,14 @@ process IVAR_VARIANTS {
     samtools \\
         mpileup \\
         $args2 \\
-        --reference $ref \\
+        --reference $fasta \\
         $bam \\
         $mpileup \\
         | ivar \\
             variants \\
             $args \\
             $features \\
-            -r $ref \\
+            -r $fasta \\
             -p $prefix
 
     cat <<-END_VERSIONS > versions.yml

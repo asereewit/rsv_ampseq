@@ -8,15 +8,15 @@ process BCFTOOLS_MPILEUP {
         'public.ecr.aws/biocontainers/bcftools:1.17--haef29d1_0' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), val(ref), path(bam)
     path ref_rsva
     path ref_rsvb
     val save_mpileup
 
     output:
-    tuple val(meta), path("*.vcf"),         emit: vcf
-    tuple val(meta), path("*stats.txt"),    emit: stats
-    tuple val(meta), path("*.mpileup.gz"),  emit: mpileup, optional: true
+    tuple val(meta), val(ref), path("*.vcf"),         emit: vcf
+    tuple val(meta), val(ref), path("*stats.txt"),    emit: stats
+    tuple val(meta), val(ref), path("*.mpileup.gz"),  emit: mpileup, optional: true
     path  "versions.yml",                   emit: versions
 
     when:
@@ -30,11 +30,11 @@ process BCFTOOLS_MPILEUP {
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
     def bgzip_mpileup = save_mpileup ? "bgzip ${prefix}.mpileup" : ""
 
-    def ref
-    if ("${meta.rsv_type}" == "RSVA") {
-        ref = "${ref_rsva}"
-    } else if ("${meta.rsv_type}" == "RSVB") {
-        ref = "${ref_rsvb}"
+    def fasta
+    if ("${ref.type}" == "RSVA") {
+        fasta = "${ref_rsva}"
+    } else if ("${ref.type}" == "RSVB") {
+        fasta = "${ref_rsvb}"
     }
 
     """
@@ -42,7 +42,7 @@ process BCFTOOLS_MPILEUP {
 
     bcftools \\
         mpileup \\
-        --fasta-ref $ref \\
+        --fasta-ref $fasta \\
         $args \\
         $bam \\
         $mpileup \\

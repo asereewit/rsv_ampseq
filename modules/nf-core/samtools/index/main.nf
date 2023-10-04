@@ -8,12 +8,12 @@ process SAMTOOLS_INDEX {
         'quay.io/biocontainers/samtools:1.17--h00cdaf9_0' }"
 
     input:
-    tuple val(meta), path(input)
+    tuple val(meta), val(ref), path(input)
 
     output:
-    tuple val(meta), path("*.bai") , optional:true, emit: bai
-    tuple val(meta), path("*.csi") , optional:true, emit: csi
-    tuple val(meta), path("*.crai"), optional:true, emit: crai
+    tuple val(meta), val(ref), path("*.bai") , optional:true, emit: bai
+    tuple val(meta), val(ref), path("*.csi") , optional:true, emit: csi
+    tuple val(meta), val(ref), path("*.crai"), optional:true, emit: crai
     path  "versions.yml"           , emit: versions
 
     when:

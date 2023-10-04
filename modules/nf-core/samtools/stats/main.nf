@@ -8,11 +8,11 @@ process SAMTOOLS_STATS {
         'quay.io/biocontainers/samtools:1.17--h00cdaf9_0' }"
 
     input:
-    tuple val(meta), path(input), path(input_index)
+    tuple val(meta), val(ref), path(input), path(input_index)
     path fasta
 
     output:
-    tuple val(meta), path("*.stats"), emit: stats
+    tuple val(meta), val(ref), path("*.stats"), emit: stats
     path  "versions.yml"            , emit: versions
 
     when:

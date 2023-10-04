@@ -8,16 +8,16 @@ process BOWTIE2_ALIGN {
         'quay.io/biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:a0ffedb52808e102887f6ce600d092675bf3528a-0' }"
 
     input:
-    tuple val(meta), path(reads)
+    tuple val(meta), val(ref), path(reads)
     path rsva_index
     path rsvb_index
     val save_unaligned
     val sort_bam
 
     output:
-    tuple val(meta), path("*.bam"),     emit: bam
-    tuple val(meta), path("*.log"),     emit: log
-    tuple val(meta), path("*fastq.gz"), emit: fastq, optional:true
+    tuple val(meta), val(ref), path("*.bam"),     emit: bam
+    tuple val(meta), val(ref), path("*.log"),     emit: log
+    tuple val(meta), val(ref), path("*fastq.gz"), emit: fastq, optional:true
     path  "versions.yml",               emit: versions
 
     when:
@@ -29,9 +29,9 @@ process BOWTIE2_ALIGN {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     def index = ""
-    if ("${meta.rsv_type}" == "RSVA") {
+    if ("${ref.type}" == "RSVA") {
         index = "bt2_RSVA/RSVA"
-    } else if ("${meta.rsv_type}" == "RSVB") {
+    } else if ("${ref.type}" == "RSVB") {
         index = "bt2_RSVB/RSVB"
     }
 

@@ -8,11 +8,11 @@ process SAMTOOLS_SORT {
         'quay.io/biocontainers/samtools:1.17--h00cdaf9_0' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), val(ref), path(bam)
 
     output:
-    tuple val(meta), path("*.bam"), emit: bam
-    tuple val(meta), path("*.csi"), emit: csi, optional: true
+    tuple val(meta), val(ref), path("*.sorted.bam"),    emit: bam
+    tuple val(meta), val(ref), path("*.csi"),           emit: csi, optional: true
     path  "versions.yml"          , emit: versions
 
     when:

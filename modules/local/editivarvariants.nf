@@ -7,12 +7,12 @@ process EDIT_IVAR_VARIANTS {
         'quay.io/biocontainers/mulled-v2-77320db00eefbbf8c599692102c3d387a37ef02a:08144a66f00dc7684fad061f1466033c0176e7ad-0' }"
 
     input:
-    tuple val(meta), path(variants_tsv)
+    tuple val(meta), val(ref), path(variants_tsv)
     path gff_rsva
     path gff_rsvb
 
     output:
-    tuple val(meta), path("*.reformatted.tsv"), emit: variants_edited_tsv
+    tuple val(meta), val(ref), path("*.reformatted.tsv"), emit: variants_edited_tsv
     path "versions.yml",                        emit: versions
 
     when:
@@ -23,9 +23,9 @@ process EDIT_IVAR_VARIANTS {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     def gff
-    if ("${meta.rsv_type}" == "RSVA") {
+    if ("${ref.type}" == "RSVA") {
         gff = "${gff_rsva}"
-    } else if ("${meta.rsv_type}" == "RSVB") {
+    } else if ("${ref.type}" == "RSVB") {
         gff = "${gff_rsvb}"
     }
 
