@@ -30,9 +30,9 @@ process BOWTIE2_ALIGN {
     
     def index = ""
     if ("${ref.type}" == "RSVA") {
-        index = "bt2_RSVA/RSVA"
+        index = "${rsva_index}"
     } else if ("${ref.type}" == "RSVB") {
-        index = "bt2_RSVB/RSVB"
+        index = "${rsvb_index}"
     }
 
     def unaligned = ""
@@ -48,8 +48,12 @@ process BOWTIE2_ALIGN {
     def samtools_command = sort_bam ? 'sort' : 'view'
 
     """
+    INDEX=`find -L ${index}/ -name "*.rev.1.bt2" | sed "s/\\.rev.1.bt2\$//"`
+    [ -z "\$INDEX" ] && INDEX=`find -L ${index}/ -name "*.rev.1.bt2l" | sed "s/\\.rev.1.bt2l\$//"`
+    [ -z "\$INDEX" ] && echo "Bowtie2 index files not found" 1>&2 && exit 1
+
     bowtie2 \\
-        -x $index \\
+        -x \$INDEX \\
         $reads_args \\
         --threads $task.cpus \\
         $unaligned \\

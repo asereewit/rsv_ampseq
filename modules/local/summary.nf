@@ -22,11 +22,11 @@ process SUMMARY {
 
     def fusion_chr_start_end = ""
     if ("${ref.type}" == "RSVA") {
-        fusion_chr_start_end = "RSVA:5682-7406"
+        fusion_chr_start_end = "RSVA:${params.RSVA_F_coord}"
     } else if ("${ref.type}" == "RSVB") {
-        fusion_chr_start_end = "RSVB:5717-7441"
+        fusion_chr_start_end = "RSVB:${params.RSVB_F_coord}"
     }
-    def fusion_length = '1725'
+    def fusion_length = "${params.RSV_F_length}"
 
     """
     # raw reads and trimmed reads
