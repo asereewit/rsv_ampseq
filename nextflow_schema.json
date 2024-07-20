@@ -363,6 +363,9 @@
                 "save_bowtie2_unaligned": {
                     "type": "boolean"
                 },
+                "skip_ivar_trim": {
+                    "type": "string"
+                },
                 "save_mpileup": {
                     "type": "boolean"
                 },

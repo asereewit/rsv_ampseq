@@ -89,23 +89,30 @@ workflow RSV_AMPSEQ {
 		false
 	)
 
-	IVAR_PRIMER_TRIM (
-		FASTQ_ALIGN_BOWTIE2.out.bam,
-        FASTQ_ALIGN_BOWTIE2.out.bai,
-        params.primer_bed_RSVA,
-        params.primer_bed_RSVB,
-        []
-	)
+    if (!params.skip_ivar_trim) {
+        IVAR_PRIMER_TRIM (
+            FASTQ_ALIGN_BOWTIE2.out.bam,
+            FASTQ_ALIGN_BOWTIE2.out.bai,
+            params.primer_bed_RSVA,
+            params.primer_bed_RSVB,
+            []
+        )
+        ch_bam = IVAR_PRIMER_TRIM.out.bam
+        ch_bai = IVAR_PRIMER_TRIM.out.bai
+    } else {
+        ch_bam = FASTQ_ALIGN_BOWTIE2.out.bam
+        ch_bai = FASTQ_ALIGN_BOWTIE2.out.bai
+    }
 
     BCFTOOLS_MPILEUP (
-        IVAR_PRIMER_TRIM.out.bam,
+        ch_bam,
         params.ref_RSVA,
         params.ref_RSVB,
         params.save_mpileup
     )
 
     IVAR_VARIANTS (
-        IVAR_PRIMER_TRIM.out.bam,
+        ch_bam,
         params.ref_RSVA,
         params.ref_RSVB,
         params.ref_gff_RSVA,
@@ -120,14 +127,14 @@ workflow RSV_AMPSEQ {
     )
 
     IVAR_CONSENSUS (
-        IVAR_PRIMER_TRIM.out.bam,
+        ch_bam,
         params.ref_RSVA,
         params.ref_RSVB,
         params.save_mpileup
     ) 
 
-    IVAR_PRIMER_TRIM.out.bam
-        .join(IVAR_PRIMER_TRIM.out.bai, by: [0,1])
+    ch_bam
+        .join(ch_bai, by: [0,1])
         .join(IVAR_CONSENSUS.out.fasta, by: [0,1])
         .join(FASTQ_TRIM_FASTP_FASTQC.out.trim_log)
         .set { ch_summary }
