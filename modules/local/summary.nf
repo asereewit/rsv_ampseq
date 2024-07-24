@@ -19,14 +19,15 @@ process SUMMARY {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-
     def fusion_chr_start_end = ""
+    def fusion_length = ""
     if ("${ref.type}" == "RSVA") {
         fusion_chr_start_end = "RSVA:${params.RSVA_F_coord}"
+        fusion_length = "${params.RSVA_F_length}"
     } else if ("${ref.type}" == "RSVB") {
         fusion_chr_start_end = "RSVB:${params.RSVB_F_coord}"
+        fusion_length = "${params.RSVB_F_length}"
     }
-    def fusion_length = "${params.RSV_F_length}"
 
     """
     # raw reads and trimmed reads

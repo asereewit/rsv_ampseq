@@ -132,6 +132,10 @@
                     "type": "string",
                     "default": "5682-7406"
                 },
+                "RSVA_F_length": {
+                    "type": "integer",
+                    "default": 1725
+                },
                 "ref_RSVB": {
                     "type": "string",
                     "default": "/Users/greningerlab/AS/rsv_ampseq/ref/RSVB_V1/RSVB.fasta"
@@ -152,7 +156,7 @@
                     "type": "string",
                     "default": "5717-7441"
                 },
-                "RSV_F_length": {
+                "RSVB_F_length": {
                     "type": "integer",
                     "default": 1725
                 }

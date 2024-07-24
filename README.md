@@ -42,10 +42,11 @@ python fastq_dir_samplesheet.py fastq_dir samplesheet_name.csv
 | `--ref_gff_RSVA` | RSVA gff file |
 | `--bowtie2_index_RSVA` | directory containing bowtie2 index for RSVA reference |
 | `--RSVA_F_coord` | fusion gene coordinates in RSVA reference |
+| `--RSVA_F_length` | RSVA fusion gene length |
 | `--ref_RSVB` | RSVB reference fasta with ">RSVB" as header |
 | `--primer_bed_RSVB` | RSVB primer bed file, "_LEFT" denotes forward primers, "_RIGHT" denotes reverse primers |
 | `--ref_gff_RSVB` | RSVB gff file |
 | `--bowtie2_index_RSVB` | directory containing bowtie2 index for RSVB reference |
 | `--RSVB_F_coord` | fusion gene coordinates in RSVB reference |
-| `--RSV_F_length` | fusion gene length |
+| `--RSVB_F_length` | RSVB fusion gene length |
 | `--fasta` | fasta file of RSVA and RSVB references |
