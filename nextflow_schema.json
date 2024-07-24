@@ -368,7 +368,7 @@
                     "type": "boolean"
                 },
                 "skip_ivar_trim": {
-                    "type": "string"
+                    "type": "boolean"
                 },
                 "save_mpileup": {
                     "type": "boolean"
