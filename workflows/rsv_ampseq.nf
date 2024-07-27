@@ -9,11 +9,6 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowRsv_ampseq.initialise(params, log)
 
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
-// Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
-
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
@@ -33,6 +28,7 @@ include { SUMMARY                   } from '../modules/local/summary'
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK               } from '../subworkflows/local/input_check'
+include { PREPARE_GENOME            } from '../subworkflows/local/prepare_genome'
 include { SELECT_REFERENCE          } from '../subworkflows/local/select_reference'
 include { IVAR_PRIMER_TRIM          } from '../subworkflows/local/ivar_primer_trim'
 
@@ -67,6 +63,8 @@ workflow RSV_AMPSEQ {
         ch_input
     )
 
+    PREPARE_GENOME () 
+
     FASTQ_TRIM_FASTP_FASTQC (
         INPUT_CHECK.out.reads,
         file(params.adapter_fasta),
@@ -83,8 +81,8 @@ workflow RSV_AMPSEQ {
 
 	FASTQ_ALIGN_BOWTIE2 ( 
         SELECT_REFERENCE.out.reads,
-        params.bowtie2_index_RSVA,
-        params.bowtie2_index_RSVB,
+        PREPARE_GENOME.out.bowtie2_index_RSVA,
+        PREPARE_GENOME.out.bowtie2_index_RSVB,
 		params.save_bowtie2_unaligned,
 		false
 	)
