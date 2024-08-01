@@ -76,7 +76,7 @@ workflow RSV_AMPSEQ {
 
     SELECT_REFERENCE (
         FASTQ_TRIM_FASTP_FASTQC.out.reads,
-        file(params.fasta)
+        PREPARE_GENOME.out.RSVA_RSVB_ref
     )
 
 	FASTQ_ALIGN_BOWTIE2 ( 
@@ -91,8 +91,8 @@ workflow RSV_AMPSEQ {
         IVAR_PRIMER_TRIM (
             FASTQ_ALIGN_BOWTIE2.out.bam,
             FASTQ_ALIGN_BOWTIE2.out.bai,
-            params.primer_bed_RSVA,
-            params.primer_bed_RSVB,
+            PREPARE_GENOME.out.primer_bed_RSVA,
+            PREPARE_GENOME.out.primer_bed_RSVB,
             []
         )
         ch_bam = IVAR_PRIMER_TRIM.out.bam
@@ -104,30 +104,30 @@ workflow RSV_AMPSEQ {
 
     BCFTOOLS_MPILEUP (
         ch_bam,
-        params.ref_RSVA,
-        params.ref_RSVB,
+        PREPARE_GENOME.out.RSVA_ref,
+        PREPARE_GENOME.out.RSVB_ref,
         params.save_mpileup
     )
 
     IVAR_VARIANTS (
         ch_bam,
-        params.ref_RSVA,
-        params.ref_RSVB,
-        params.ref_gff_RSVA,
-        params.ref_gff_RSVB,
+        PREPARE_GENOME.out.RSVA_ref,
+        PREPARE_GENOME.out.RSVB_ref,
+        PREPARE_GENOME.out.ref_gff_RSVA,
+        PREPARE_GENOME.out.ref_gff_RSVB,
         false
     )
 
     EDIT_IVAR_VARIANTS (
         IVAR_VARIANTS.out.tsv,
-        params.ref_gff_RSVA,
-        params.ref_gff_RSVB
+        PREPARE_GENOME.out.ref_gff_RSVA,
+        PREPARE_GENOME.out.ref_gff_RSVB
     )
 
     IVAR_CONSENSUS (
         ch_bam,
-        params.ref_RSVA,
-        params.ref_RSVB,
+        PREPARE_GENOME.out.RSVA_ref,
+        PREPARE_GENOME.out.RSVB_ref,
         params.save_mpileup
     ) 
 

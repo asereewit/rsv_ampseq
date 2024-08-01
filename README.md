@@ -37,14 +37,13 @@ python fastq_dir_samplesheet.py fastq_dir samplesheet_name.csv
 ## Custom primers options
 |Option|Explanation|
 |------|-----------|
-| `--ref_RSVA` | RSVA reference fasta with ">RSVA" as header |
-| `--primer_bed_RSVA` | RSVA primer bed file, "_LEFT" denotes forward primers, "_RIGHT" denotes reverse primers |
-| `--ref_gff_RSVA` | RSVA gff file |
-| `--RSVA_F_coord` | fusion gene coordinates in RSVA reference |
+| `--ref_RSVA` | RSVA reference fasta |
+| `--primer_bed_RSVA` | RSVA primer bed file with "RSVA" as the header in the first column, "_LEFT" denotes forward primers, "_RIGHT" denotes reverse primers |
+| `--ref_gff_RSVA` | RSVA gff file with "RSVA" as the header in the first column |
+| `--RSVA_F_coord` | RSVA reference's fusion gene coordinates in the format of xxxx-yyyy (e.g. 5682-7406) |
 | `--RSVA_F_length` | RSVA fusion gene length |
-| `--ref_RSVB` | RSVB reference fasta with ">RSVB" as header |
-| `--primer_bed_RSVB` | RSVB primer bed file, "_LEFT" denotes forward primers, "_RIGHT" denotes reverse primers |
-| `--ref_gff_RSVB` | RSVB gff file |
-| `--RSVB_F_coord` | fusion gene coordinates in RSVB reference |
+| `--ref_RSVB` | RSVB reference fasta |
+| `--primer_bed_RSVB` | RSVB primer bed file with "RSVB" as the header in the first column, "_LEFT" denotes forward primers, "_RIGHT" denotes reverse primers |
+| `--ref_gff_RSVB` | RSVB gff file with "RSVB" as the header in the first column |
+| `--RSVB_F_coord` | RSVB reference's fusion gene coordinates in the format of xxxx-yyyy (e.g. 5717-7441) |
 | `--RSVB_F_length` | RSVB fusion gene length |
-| `--fasta` | fasta file of RSVA and RSVB references |

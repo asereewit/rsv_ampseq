@@ -10,13 +10,47 @@ class WorkflowRsv_ampseq {
     // Check and validate parameters
     //
     public static void initialise(params, log) {
-        genomeExistsError(params, log)
+		if (!params.ref_RSVA) {
+			log.error "RSVA reference genome fasta file not specified. Use '--ref_RSVA RSVA_ref.fa' to specify."
+			System.exit(1)
+		}
+		if (!params.ref_RSVB) {
+			log.error "RSVB reference genome fasta file not specified. Use '--ref_RSVB RSVB_ref.fa' to specify."
+			System.exit(1)
+		}
+		if (!params.primer_bed_RSVA) {
+			log.error "RSVA primer bed file not specified. Use '--primer_bed_RSVA RSVA.primer.bed' to specify."
+			System.exit(1)
+		}
+		if (!params.primer_bed_RSVB) {
+			log.error "RSVB primer bed file not specified. Use '--primer_bed_RSVB RSVB.primer.bed' to specify."
+			System.exit(1)
+		}
+		if (!params.ref_gff_RSVA) {
+			log.error "RSVA reference gff file not specified. Use '--ref_gff_RSVA RSVA_ref.gff' to specify."
+			System.exit(1)
+		}
+		if (!params.ref_gff_RSVB) {
+			log.error "RSVB reference gff file not specified. Use '--ref_gff_RSVB RSVB_ref.gff' to specify."
+			System.exit(1)
+		}
+		if (!params.RSVA_F_coord) {
+			log.error "RSVA fusion gene coordinates (1-based) not specified. Use '--RSVA_F_coord xxxx-yyyy' to specify."
+			System.exit(1)
+		}
+		if (!params.RSVB_F_coord) {
+			log.error "RSVB fusion gene coordinates (1-based) not specified. Use '--RSVB_F_coord xxxx-yyyy' to specify."
+			System.exit(1)
+		}
+		if (!params.RSVA_F_length) {
+			log.error "RSVA fusion gene length not specified. Use '--RSVA_F_length xxxx' to specify."
+			System.exit(1)
+		}
+		if (!params.RSVB_F_length) {
+			log.error "RSVB fusion gene length not specified. Use '--RSVB_F_length xxxx' to specify."
+			System.exit(1)
+		}
 
-
-        if (!params.fasta) {
-            log.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
-            System.exit(1)
-        }
     }
 
     //
@@ -61,17 +95,5 @@ class WorkflowRsv_ampseq {
         def description_html = engine.createTemplate(methods_text).make(meta)
 
         return description_html
-    }//
-    // Exit pipeline if incorrect --genome key provided
-    //
-    private static void genomeExistsError(params, log) {
-        if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
-            log.error "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
-                "  Currently, the available genome keys are:\n" +
-                "  ${params.genomes.keySet().join(", ")}\n" +
-                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-            System.exit(1)
-        }
     }
 }
