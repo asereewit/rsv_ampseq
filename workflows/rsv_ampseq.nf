@@ -23,6 +23,7 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 //
 include { EDIT_IVAR_VARIANTS        } from '../modules/local/editivarvariants'
 include { SUMMARY                   } from '../modules/local/summary'
+include { SUMMARY_CLEANUP           } from '../modules/local/summary_cleanup'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -74,8 +75,12 @@ workflow RSV_AMPSEQ {
         params.skip_fastqc
     )
 
+    FASTQ_TRIM_FASTP_FASTQC.out.trim_reads_fail_min
+        .collect()
+        .set { ch_trim_fail_min_summary }
+
     SELECT_REFERENCE (
-        FASTQ_TRIM_FASTP_FASTQC.out.reads,
+        FASTQ_TRIM_FASTP_FASTQC.out.trim_reads_pass_min,
         PREPARE_GENOME.out.RSVA_RSVB_ref
     )
 
@@ -87,10 +92,33 @@ workflow RSV_AMPSEQ {
 		false
 	)
 
+    FASTQ_ALIGN_BOWTIE2.out.flagstat
+        .map { meta, ref, flagstat -> [ meta, ref ] + CheckReads.getFlagstatMappedReads(flagstat, params) }
+        .set { ch_mapped_reads }
+
+    ch_mapped_reads
+        .map { meta, ref, mapped, pass -> if (!pass) [ meta, ref, mapped ] }
+        .join(FASTQ_TRIM_FASTP_FASTQC.out.reads_num, by: [0])
+        .map {
+            meta, ref, mapped, num_reads, num_trimmed_reads ->
+            [ "$meta.id\t$ref.type\t$num_reads\t$num_trimmed_reads\t0\t$mapped\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0" ]
+        }
+        .collect()
+        .set { ch_align_ref_fail_summary }
+
+    ch_mapped_reads
+        .map { meta, ref, mapped, pass -> if (pass) [ meta, ref ] }
+        .join(FASTQ_ALIGN_BOWTIE2.out.bam, by: [0, 1])
+        .join(FASTQ_ALIGN_BOWTIE2.out.bai, by: [0, 1])
+        .multiMap { meta, ref, bam, bai -> 
+            bam:    [ meta, ref, bam ]
+            bai:    [ meta, ref, bai ]
+        }.set { ch_variants_consensus }
+
     if (!params.skip_ivar_trim) {
         IVAR_PRIMER_TRIM (
-            FASTQ_ALIGN_BOWTIE2.out.bam,
-            FASTQ_ALIGN_BOWTIE2.out.bai,
+            ch_variants_consensus.bam,
+            ch_variants_consensus.bai,
             PREPARE_GENOME.out.primer_bed_RSVA,
             PREPARE_GENOME.out.primer_bed_RSVB,
             []
@@ -98,8 +126,8 @@ workflow RSV_AMPSEQ {
         ch_bam = IVAR_PRIMER_TRIM.out.bam
         ch_bai = IVAR_PRIMER_TRIM.out.bai
     } else {
-        ch_bam = FASTQ_ALIGN_BOWTIE2.out.bam
-        ch_bai = FASTQ_ALIGN_BOWTIE2.out.bai
+        ch_bam = ch_variants_consensus.bam
+        ch_bai = ch_variants_consensus.bai
     }
 
     BCFTOOLS_MPILEUP (
@@ -139,8 +167,20 @@ workflow RSV_AMPSEQ {
     
     SUMMARY ( ch_summary )
 
+    ch_align_ref_fail_summary
+        .concat( ch_trim_fail_min_summary )
+        .map { tsvdata -> CheckReads.tsvFromList(tsvdata) }
+        .collectFile(storeDir: "${params.output}/summary", name:"fail_summary.tsv", keepHeader: true, sort: false)
+        .set { ch_fail_summary }
+
     SUMMARY.out.summary_tsv
-        .collectFile(storeDir: "${params.output}", name:"${params.run_name}_summary.tsv", keepHeader: true, sort: true)
+        .collectFile(storeDir: "${params.output}/summary", name:"pass_summary.tsv", keepHeader: true, sort: true)
+        .set { ch_pass_summary }
+
+    SUMMARY_CLEANUP (
+        ch_fail_summary,
+        ch_pass_summary
+    )
 
 }
 

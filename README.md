@@ -32,6 +32,8 @@ python fastq_dir_samplesheet.py fastq_dir samplesheet_name.csv
 | `--skip_fastqc` | skip quality control using FastQC (default: false) |
 | `--skip_fastp` | skip adapters and reads trimming using fastp (default: false) |
 | `--trim_len` | minimum read length to keep (default:50) |
+| `--min_trim_reads | mininum number of trimmed reads required for downstream processes (default: 0) |
+| `--min_mapped_reads | minimum number of mapped reads for variants and consensus calling (default: 1000) |
 | `--skip_ivar_trim` | skip primer clipping step |
 
 ## Custom primers options

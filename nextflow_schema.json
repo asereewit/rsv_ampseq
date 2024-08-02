@@ -29,6 +29,10 @@
                 "trim_len": {
                     "type": "integer",
                     "default": 50
+                },
+                "min_trim_reads": {
+                    "type": "integer",
+                    "default": 0
                 }
             }
         },
@@ -57,10 +61,6 @@
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
-                },
-                "run_name": {
-                    "type": "string",
-                    "default": "run"
                 },
                 "email": {
                     "type": "string",
@@ -331,6 +331,10 @@
             "properties": {
                 "save_bowtie2_unaligned": {
                     "type": "boolean"
+                },
+                "min_mapped_reads": {
+                    "type": "integer",
+                    "default": 1000
                 },
                 "skip_ivar_trim": {
                     "type": "boolean"
