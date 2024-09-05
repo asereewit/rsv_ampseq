@@ -4,7 +4,7 @@ process SUMMARY {
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/':
-        'greningerlab/revica:ubuntu-20.04' }"
+        'quay.io/jefffurlong/revica:ubuntu-20.04' }"
 
     input:
     tuple val(meta), val(ref), path(ivar_trim_bam), path(ivar_trim_bam_bai), path(ivar_consensus), path(fastp_trim_log)
