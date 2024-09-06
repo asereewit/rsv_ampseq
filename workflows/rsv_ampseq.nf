@@ -12,6 +12,9 @@ WorkflowRsv_ampseq.initialise(params, log)
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
+// Config file
+ch_summary_dummy_file = file("$baseDir/assets/summary_dummy_file.tsv", checkIfExists: true)
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
@@ -178,8 +181,8 @@ workflow RSV_AMPSEQ {
         .set { ch_pass_summary }
 
     SUMMARY_CLEANUP (
-        ch_fail_summary,
-        ch_pass_summary
+        ch_fail_summary.ifEmpty(ch_summary_dummy_file),
+        ch_pass_summary.ifEmpty(ch_summary_dummy_file)
     )
 
 }
